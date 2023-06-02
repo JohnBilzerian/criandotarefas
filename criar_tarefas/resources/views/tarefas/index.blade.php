@@ -17,15 +17,26 @@
      <div class="card-body">
           <div class="row mb-3">
                <div class="col col-md-3">
+                    <label for="search">Buscar:</label>
+                    <input id="search" type="text" class="form-control" placeholder="Digite o termo de busca">
+               </div>
+               <div class="col col-md-3">
+                    <label> </label>
+                    <button id="btn-search" class="btn btn-primary">Buscar</button>
+               </div>
+          </div>
+
+          <div class="row mb-3">
+               <div class="col col-md-3">
                     <label for="status">Status:</label>
                     <select id="status" class="form-control">
                          <option value="">Todos</option>
-                         <option value="Concluido">Concluido</option>
+                         <option value="Concluido">Concluído</option>
                          <option value="Nao Concluido">Pendente</option>
                     </select>
                </div>
                <div class="col col-md-3">
-                    <label for="prioridade">Prioridade :</label>
+                    <label for="prioridade">Prioridade:</label>
                     <select id="prioridade" class="form-control">
                          <option value="">Todas</option>
                          <option value="Alta">Alta</option>
@@ -34,10 +45,11 @@
                     </select>
                </div>
                <div class="col col-md-3">
-                    <label> </label>
+                    <label></label>
                     <button id="btn-filter" class="btn btn-primary">Filtrar</button>
                </div>
           </div>
+
           <table id="tarefas-table" class="table table-bordered">
                <tr>
                     <th>Título</th>
@@ -50,11 +62,11 @@
                @if(count($data) > 0)
                @foreach($data as $row)
                <tr>
-                    <td>{{ $row->tarefa_titulo }}</td>
-                    <td>{{ $row->tarefa_descricao }}</td>
-                    <td>{{ $row->tarefa_status }}</td>
-                    <td>{{ $row->tarefa_data }}</td>
-                    <td>{{ $row->tarefa_prioridade }}</td>
+                    <td data-title="Título">{{ $row->tarefa_titulo }}</td>
+                    <td data-title="Descrição">{{ $row->tarefa_descricao }}</td>
+                    <td data-title="Status">{{ $row->tarefa_status }}</td>
+                    <td data-title="Data de Conclusão">{{ $row->tarefa_data }}</td>
+                    <td data-title="Prioridade">{{ $row->tarefa_prioridade }}</td>
                     <td>
                          <form method="post" action="{{ route('tarefas.destroy', $row->id) }}">
                               @csrf
@@ -65,6 +77,49 @@
                          </form>
                     </td>
                </tr>
+               @section('js')
+               <script>
+                    $(document).ready(function() {
+                         $('#btn-search').click(function() {
+                              var searchTerm = $('#search').val().toLowerCase();
+                              $('#tarefas-table tbody tr').each(function() {
+                                   var title = $(this).find('td[data-title="Título"]').text().toLowerCase();
+                                   var description = $(this).find('td[data-title="Descrição"]').text().toLowerCase();
+                                   if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                                        $(this).show();
+                                   } else {
+                                        $(this).hide();
+                                   }
+                              });
+                         });
+
+                         $('#btn-filter').click(function() {
+                              var statusFilter = $('#status').val();
+                              var prioridadeFilter = $('#prioridade').val();
+                              $('#tarefas-table tbody tr').each(function() {
+                                   var status = $(this).find('td[data-title="Status"]').text();
+                                   var prioridade = $(this).find('td[data-title="Prioridade"]').text();
+
+                                   var statusMatch = (statusFilter === '' || status === statusFilter);
+                                   var prioridadeMatch = (prioridadeFilter === '' || prioridade === prioridadeFilter);
+
+                                   if (statusMatch && prioridadeMatch) {
+                                        $(this).show();
+                                   } else {
+                                        $(this).hide();
+                                   }
+                              });
+                         });
+                    });
+               </script>
+               @endsection
+
+               @section('js')
+               <!-- Inclua outros scripts adicionais aqui -->
+               <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+               <script src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
+               <script src="https://cdn.datatables.net/1.11.1/js/dataTables.bootstrap5.min.js"></script>
+               @endsection
                @endforeach
                @else
                <tr>
