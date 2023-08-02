@@ -8,7 +8,7 @@
 <div class="card">
      <div class="card-header">
           <div class="row">
-               <div class="col col-md-6"><b>Tarefa Data</b></div>
+               <div class="col col-md-6"><b>Tarefas</b></div>
                <div class="col col-md-6">
                     <a href="{{ route('tarefas.create') }}" class="btn btn-success btn-sm float-end">Adicionar</a>
                </div>
@@ -32,7 +32,7 @@
                     <select id="status" class="form-control">
                          <option value="">Todos</option>
                          <option value="Concluido">Concluído</option>
-                         <option value="Nao Concluido">Pendente</option>
+                         <option value="Nao Concluido">Não Concluído</option>
                     </select>
                </div>
                <div class="col col-md-3">
