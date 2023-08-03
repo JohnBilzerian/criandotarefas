@@ -1,4 +1,6 @@
-namespace Test\Unit
+<?php
+
+namespace Test\Unit;
 
 use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,7 +21,7 @@ class ProductTest extends TestCase
     {
         // Teste Create (Criação)
         $productsData = [];
-        for ($i = 1; <= 10; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
             $productsData[] = [
                 'name' => 'Produto' . $i,
                 'price' => 10.00 + $i,
